@@ -24,5 +24,10 @@ except ImportError:
 
 import pylint
 
-# pylint before version 2.3 does not support load_configuration() hook.
-LOAD_CONFIGURATION_SUPPORTED = pylint.__pkginfo__.numversion >= (2, 3)
+if hasattr(pylint.__pkginfo__, 'numversion'):
+    # Compatibility with pylint < 2.8.
+    # pylint before version 2.3 does not support load_configuration() hook.
+    LOAD_CONFIGURATION_SUPPORTED = pylint.__pkginfo__.numversion >= (2, 3)
+else:
+    # pylint >= 2.8 #29bc551 switched to '__version__'.
+    LOAD_CONFIGURATION_SUPPORTED = hasattr(pylint.__pkginfo__, '__version__')
